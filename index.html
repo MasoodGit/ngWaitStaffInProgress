@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="waitStaffApp">
+<head>
+  <title>WaitStaff Calculator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1 class="text-center border-bottom">WaitStaff Calculator</h1>
+  </header>
+  <div class="row">
+    <div class="col-md-12">
+      <nav>
+        <ul>
+          <li><a href="#/">Home</a></li>
+          <li><a href="#/newMeal">New Meal</a></li>
+          <li><a href="#/myEarnings">My Earnings</a></li>
+        </ul>
+      </nav>
+      <div class="center-content" ng-view></div>
+      </div>
+  </div>
+</div>
+<script type="text/javascript" src="angular.js"></script>
+<script type="text/javascript" src="angular-messages.js"></script>
+<script type="text/javascript" src="angular-route.js"></script>
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="myEarningsService.js"></script>
+<script type="text/ng-template" id="number-error-messages">
+  <p ng-message="number">Enter a number</p>
+  <p ng-message="required">Number is required.</p>
+</script>
+</body>
+</html>
