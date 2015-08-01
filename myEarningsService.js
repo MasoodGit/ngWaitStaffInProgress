@@ -10,7 +10,7 @@ waitStaffApp
     subtotal:0.0,
     tipAmount:0.0
   };
-
+  
   var earnings = {
     tipTotal:0.0,
     mealCount:0.0
@@ -59,7 +59,6 @@ waitStaffApp
     customerCharges.subtotal = basePrice + (basePrice * (taxRate/100 ));
     customerCharges.tipAmount = basePrice * (tipPercentage/100);
   };
-
 
   this.mealDetails = function() {
     return mealDetails;

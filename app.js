@@ -13,11 +13,11 @@ waitStaffApp.config(function($routeProvider) {
   })
   .when('/newMeal',{
     templateUrl: 'newMeal.tpl.html',
-    controller: 'WaitStaffController as WaitStaff'
+    controller: 'WaitStaffController as mealCtrl'
   })
   .when('/myEarnings',{
     templateUrl: 'myEarnings.tpl.html',
-    controller: 'MyEarningsController as Earnings'
+    controller: 'MyEarningsController'
   })
   .when('/error',{
     template: '<p>Error - Missing this Page...</p>'
@@ -30,36 +30,9 @@ waitStaffApp.config(function($routeProvider) {
  * WaitStaffController :
  */
 waitStaffApp.controller("WaitStaffController",function($scope,myEarningsService) {
-  var WaitStaffController = this;
-  WaitStaffController.data = myEarningsService;
+  var mealCtrl = this;
+  mealCtrl.data = myEarningsService;
   myEarningsService.resetMealDetails();
-
-  /*
-   * calculates customercharges and waitstaff earnings
-   * if the form is valid
-   */
-  $scope.mealDetailsFormSubmit = function() {
-    if($scope.mealDetailsForm.$valid) {
-      myEarningsService.updateCustomerCharges();
-      myEarningsService.updateEarnings();
-    }
-  };
-
-  /*
-   * triggers field validation if form is
-   * submitted or if the field is blur
-   */
-  WaitStaffController.interacted = function(field) {
-    return $scope.mealDetailsForm.$submitted || field.$touched;
-  };
-
-  /*
-   * called when user clicks cancel on
-   * the MealDetailsForm
-   */
-  WaitStaffController.resetMealDetails = function() {
-    myEarningsService.resetMealDetails();
-  };
 
   /*
    * calculates the customer charges
@@ -74,18 +47,47 @@ waitStaffApp.controller("WaitStaffController",function($scope,myEarningsService)
   updateEarnings = function() {
     myEarningsService.updateEarnings();
   };
+
+  /*
+   * calculates customercharges and waitstaff earnings
+   * if the form is valid
+   */
+  mealCtrl.mealDetailsFormSubmit = function() {
+    if($scope.mealDetailsForm.$valid) {
+      myEarningsService.updateCustomerCharges();
+      myEarningsService.updateEarnings();
+    }
+  };
+
+  /*
+   * triggers field validation if form is
+   * submitted or if the field is blur
+   */
+  mealCtrl.interacted = function(field) {
+    return $scope.mealDetailsForm.$submitted || field.$touched;
+  };
+
+  /*
+   * called when user clicks cancel on
+   * the MealDetailsForm
+   */
+  mealCtrl.resetMealDetails = function() {
+    myEarningsService.resetMealDetails();
+  };
+
+  
 });
 
 /*
  * MyEarningsController :
  */
 waitStaffApp.controller('MyEarningsController',function(myEarningsService) {
-  var EarningsController = this;
-  EarningsController.data = myEarningsService;
+  var earingsController = this;
+  earingsController.data = myEarningsService;
   /*
   * resets everything on the App
   */
-  EarningsController.resetWaitStaffCalculator = function() {
+  earingsController.resetWaitStaffCalculator = function() {
     myEarningsService.resetWaitStaffCalculator();
   };
 
