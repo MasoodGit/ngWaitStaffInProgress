@@ -1,94 +1,94 @@
-var waitStaffApp = angular.module("waitStaffApp",['ngMessages','ngRoute']);
+var waitStaffApp = angular.module("waitStaffApp", ['ngMessages', 'ngRoute']);
 
-waitStaffApp.run(function($rootScope,$location){
-  $rootScope.$on('$routeChangeError', function(){
-    $location.path('/error');
-  });
+waitStaffApp.run(function($rootScope, $location) {
+    $rootScope.$on('$routeChangeError', function() {
+        $location.path('/error');
+    });
 });
 
 waitStaffApp.config(function($routeProvider) {
-  $routeProvider
-  .when('/', {
-    templateUrl: 'home.tpl.html'
-  })
-  .when('/newMeal',{
-    templateUrl: 'newMeal.tpl.html',
-    controller: 'WaitStaffController as mealCtrl'
-  })
-  .when('/myEarnings',{
-    templateUrl: 'myEarnings.tpl.html',
-    controller: 'MyEarningsController'
-  })
-  .when('/error',{
-    template: '<p>Error - Missing this Page...</p>'
-  })
-  .otherwise('/error');
+    $routeProvider
+        .when('/', {
+            templateUrl: 'home.tpl.html'
+        })
+        .when('/newMeal', {
+            templateUrl: 'newMeal.tpl.html',
+            controller: 'WaitStaffController',
+            controllerAs: 'mealCtrl'
+        })
+        .when('/myEarnings', {
+            templateUrl: 'myEarnings.tpl.html',
+            controller: 'MyEarningsController',
+            controllerAs: 'earningsCtrl'
+        })
+        .when('/error', {
+            template: '<p>Error - Missing this Page...</p>'
+        })
+        .otherwise('/error');
 });
 
 
 /*
  * WaitStaffController :
  */
-waitStaffApp.controller("WaitStaffController",function($scope,myEarningsService) {
-  var mealCtrl = this;
-  mealCtrl.data = myEarningsService;
-  myEarningsService.resetMealDetails();
+waitStaffApp.controller("WaitStaffController", function($scope, calculatorService) {
 
-  /*
-   * calculates the customer charges
-   */
-  updateCustomerCharges = function() {
-    myEarningsService.updateCustomerCharges();
-  };
+    var self = this;
 
-  /*
-   * calculates the earning for the waitstaff
-   */
-  updateEarnings = function() {
-    myEarningsService.updateEarnings();
-  };
+    self.calculatorService = calculatorService;
 
-  /*
-   * calculates customercharges and waitstaff earnings
-   * if the form is valid
-   */
-  mealCtrl.mealDetailsFormSubmit = function() {
-    if($scope.mealDetailsForm.$valid) {
-      myEarningsService.updateCustomerCharges();
-      myEarningsService.updateEarnings();
+    self.mealDetails = {
+        basePrice: 0.0,
+        taxRate: 0.0,
+        tipPercentage: 0.0
     }
-  };
 
-  /*
-   * triggers field validation if form is
-   * submitted or if the field is blur
-   */
-  mealCtrl.interacted = function(field) {
-    return $scope.mealDetailsForm.$submitted || field.$touched;
-  };
+    self.customerCharges = {
+        subtotal: 0.0,
+        tipAmount: 0.0
+    }
 
-  /*
-   * called when user clicks cancel on
-   * the MealDetailsForm
-   */
-  mealCtrl.resetMealDetails = function() {
-    myEarningsService.resetMealDetails();
-  };
+    /*
+     * calculates customercharges and waitstaff earnings
+     * if the form is valid
+     */
+    self.mealDetailsFormSubmit = function() {
+        if ($scope.mealDetailsForm.$valid) {
+            self.customerCharges = calculatorService.addMealDetails(self.mealDetails);
+        }
+    };
 
-  
+    self.resetMealDetails = function() {
+        self.mealDetails.basePrice = 0.0;
+        self.mealDetails.taxRate = 0.0;
+        self.mealDetails.tipPercentage = 0.0;
+        self.customerCharges.subtotal = 0.0;
+        self.customerCharges.tipAmount = 0.0;
+    }
+
+    /*
+     * triggers field validation if form is
+     * submitted or if the field is blur
+     */
+    self.interacted = function(field) {
+        return $scope.mealDetailsForm.$submitted || field.$touched;
+    };
+
+
+
 });
 
 /*
  * MyEarningsController :
  */
-waitStaffApp.controller('MyEarningsController',function(myEarningsService) {
-  var earingsController = this;
-  earingsController.data = myEarningsService;
-  /*
-  * resets everything on the App
-  */
-  earingsController.resetWaitStaffCalculator = function() {
-    myEarningsService.resetWaitStaffCalculator();
-  };
+waitStaffApp.controller('MyEarningsController', function(calculatorService) {
+    var self = this;
+    self.calculatorService = calculatorService;
+    /*
+     * resets everything on the App
+     */
+    self.resetWaitStaffCalculator = function() {
+        //myEarningsService.resetWaitStaffCalculator();
+    };
 
 });
